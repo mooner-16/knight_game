@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>중세 기사 FPS 멀티플레이</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Malgun Gothic', sans-serif; background: #111; color: white;}
+        #ui-layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 10; }
+        .box { background: #222; padding: 30px; border-radius: 10px; text-align: center; border: 2px solid #555; }
+        input, select, button { margin: 10px; padding: 10px; font-size: 16px; border-radius: 5px; }
+        button { cursor: pointer; background: #d4af37; border: none; color: black; font-weight: bold; }
+        button:hover { background: #b5952f; }
+        
+        #hud { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; display: none; z-index: 5;}
+        #crosshair { position: absolute; top: 50%; left: 50%; width: 10px; height: 10px; background: white; border-radius: 50%; transform: translate(-50%, -50%); mix-blend-mode: difference; }
+        #hp-bar-container { position: absolute; bottom: 30px; left: 30px; width: 300px; height: 20px; background: rgba(0,0,0,0.5); border: 2px solid #333; }
+        #hp-bar { width: 100%; height: 100%; background: #e74c3c; transition: width 0.2s; }
+        #status-text { position: absolute; bottom: 60px; left: 30px; font-size: 20px; font-weight: bold; text-shadow: 2px 2px 0 #000; }
+        #kill-log { position: absolute; top: 20px; right: 20px; text-align: right; color: #ffeb3b; font-size: 18px; text-shadow: 1px 1px 0 #000;}
+        
+        #settings { position: absolute; top: 20%; left: 50%; transform: translate(-50%, 0); background: #333; padding: 20px; border-radius: 10px; display: none; z-index: 20; border: 2px solid #777;}
+    </style>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://unpkg.com/three@0.158.0/build/three.module.js",
+                "three/addons/": "https://unpkg.com/three@0.158.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+
+    <!-- 접속 로비 -->
+    <div id="ui-layer">
+        <div class="box">
+            <h1>검과 명예 (기사 FPS)</h1>
+            <input type="text" id="nickname" placeholder="닉네임을 입력하세요" required><br>
+            <select id="class-select">
+                <option value="Vanguard">뱅가드 (밸런스형, 스킬: 대쉬)</option>
+                <option value="Guardian">가디언 (탱커형, 스킬: 회복)</option>
+                <option value="Assassin">어쌔신 (빠른속도, 스킬: 은신)</option>
+            </select><br>
+            <button id="join-btn">게임 접속하기</button>
+            <p style="font-size:14px; color:#aaa;">조작: WASD(이동) / Shift(달리기) / Ctrl(앉기)<br>좌클릭(공격) / 우클릭(막기) / E(스킬) / ESC(설정)</p>
+        </div>
+    </div>
+
+    <!-- 설정 창 (ESC로 열기) -->
+    <div id="settings">
+        <h3>설정 (Settings)</h3>
+        <label>마우스 감도: <input type="range" id="sens" min="0.1" max="3" step="0.1" value="1"></label><br><br>
+        <button id="close-settings">닫기 / 게임으로 돌아가기</button>
+    </div>
+
+    <!-- 게임 HUD -->
+    <div id="hud">
+        <div id="crosshair"></div>
+        <div id="status-text">HP: 100 / 100 | 직업: -</div>
+        <div id="hp-bar-container"><div id="hp-bar"></div></div>
+        <div id="kill-log"></div>
+    </div>
+
+    <script type="module" src="game.js"></script>
+</body>
+</html>
