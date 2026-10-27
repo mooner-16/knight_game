@@ -6,7 +6,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-app.use(express.static('public')); // public 폴더의 파일을 화면에 보여줌
+app.use(express.static(__dirname));
 
 // 기사 클래스 스펙 (서버 검증용)
 const CLASSES = {
